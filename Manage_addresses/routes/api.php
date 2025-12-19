@@ -10,10 +10,10 @@ Route::post("/address/new", [AddressController::class, 'newAddress']);
 /**Route to get all addresses */
 Route::get("/addresses", [AddressController::class, 'getAddresses']);
 /**Route to update an address */
-Route::get("/address/update/details", [AddressController::class, 'updateAddressDetails']);
+Route::put("/address/{id}", [AddressController::class, 'updateAddressDetails']);
 /**Route to delete an address */
-Route::get("/address/delete", [AddressController::class, 'deleteAddressById']);
+Route::delete("/address/{id}", [AddressController::class, 'deleteAddressById']);
 /**Route to mark student as is deleted true */
-Route::delete("/address/delete", [AddressController::class, 'markIsdeletedTrue']);
+Route::delete("/address/deleted", [AddressController::class, 'markIsdeletedTrue']);
 /**Route to mark student as is deleted false */
 Route::put("/address/delete", [AddressController::class, 'markIsdeletedFalse']);

@@ -9,6 +9,16 @@ use Exception;
 
 class AddressController extends Controller
 {
+
+
+    public function index()
+    {
+        // agar login system nahi hai
+        $addresses = Address::all();
+
+        return view('index', compact('addresses'));
+    }
+
     public function newAddress(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -75,21 +85,10 @@ class AddressController extends Controller
         }
     }
     /**Function to update an address */
-    public function updateAddressDetails(Request $request)
+    public function updateAddressDetails(Request $request, $id)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                "id" => "required",
-            ]);
-            if ($validator->fails()) {
-                return response()->json([
-                    "status" => "failure",
-                    "status_code" => 400,
-                    "message" => "Validation Error",
-                    "errors" => $validator->errors()
-                ]);
-            }
-            $address = Address::where([["id", $request->id]])->first();
+            $address = Address::where([["id", $id]])->first();
             if (!$address) {
                 return response()->json([
                     "status" => "failure",
@@ -98,29 +97,15 @@ class AddressController extends Controller
                     "data" => []
                 ]);
             }
-            if ($request->has('name')) {
-                $address->name = $request->name;
-            }
-            if ($request->has('mobile')) {
-                $address->mobile = $request->mobile;
-            }
-            if ($request->has('address')) {
-                $address->address = $request->address;
-            }
-            if ($request->has('city')) {
-                $address->city = $request->city;
-            }
-            if ($request->has('state')) {
-                $address->state = $request->state;
-            }
-            if ($request->has('pincode')) {
-                $address->pincode = $request->pincode;
-            }
-            if ($request->has('type')) {
-                $address->type = $request->type;
-            }
-            $address->save();
-
+            $address->update($request->only([
+                'name',
+                'mobile',
+                'address',
+                'city',
+                'state',
+                'pincode',
+                'type',
+            ]));
             return response()->json([
                 "status" => "success",
                 "status_code" => 200,
@@ -137,21 +122,10 @@ class AddressController extends Controller
         }
     }
     /**Function to delete an address */
-    public function deleteAddressById(Request $request)
+    public function deleteAddressById($id)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                "id" => "required",
-            ]);
-            if ($validator->fails()) {
-                return response()->json([
-                    "status" => "failure",
-                    "status_code" => 400,
-                    "message" => "Validation Error",
-                    "errors" => $validator->errors()
-                ]);
-            }
-            $address = Address::where([["id", $request->id]])->first();
+            $address = Address::where([["id", $id]])->first();
             if (!$address) {
                 return response()->json([
                     "status" => "failure",
